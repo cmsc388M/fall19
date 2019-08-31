@@ -117,11 +117,15 @@ You will see that two functions were automatically generated for you in the scri
 
 The following line of code will print "Hello world!" into the Unity Editor's console at the start of your program. The Debug class contains many static methods to log errors, exceptions, warnings, and messages to the console. These can be especially helpful when you're running your program and are trying to figure out what is happening behind the scenes in order to debug unexpected behavior. Go ahead and copy this code into your _**Start**_ function.
 
-`Debug.Log("Hello world!");`
+```c#
+Debug.Log("Hello world!");
+```
 
 The following line of code will rotate the cube steadily with each passing frame. Copy it into your _**Update**_ function.
 
-`transform.Rotate(Vector3.up, 100 * Time.deltaTime);`
+```c#
+transform.Rotate(Vector3.up, 100 * Time.deltaTime);
+```
 
 Make sure to save your script once you've edited it.
 
@@ -143,7 +147,7 @@ Next click the play button to see your work in action.
 
 ### Setting the Settings
 
-Now that we know the project works in the editor, let's go ahead and set it up to be built. First we have to add our scene to the build. To do this, open up the _**Build Settings**_ window and click on the _**Add Open Scenes**_ button. Next, switch the target platform to -**Android**_. Finally, we have to change a few _**Player Settings**_. Note that most _**Player Settings**_ are separate 
+Now that we know the project works in the editor, let's go ahead and set it up to be built. First we have to add our scene to the build. To do this, open up the _**Build Settings**_ window and click on the _**Add Open Scenes**_ button. Next, switch the target platform to _**Android**_. Finally, we have to change a few _**Player Settings**_. Note that most _**Player Settings**_ are platform-specific (i.e. you have different player settings for Android, iOS, etc.).
 
 ![GIF showing how to go open build and player settings](images/settings.gif)
 
@@ -199,7 +203,9 @@ Once the plugin has initialized, go to `Window` -> `GitHub`, initialize the repo
 
 Finally, exit out of Unity, open up a terminal, navigate to your project folder, and enter the command below. This will create a zip file containing only the necessary files for the project, following the rules outlined in the `.gitignore` file. Note that this command only considers files and assets that were included in the latest commit.
 
-`git archive -o Last_First_SpinningCube.zip HEAD`
+```shell
+git archive -o Last_First_SpinningCube.zip HEAD
+```
 
 ## Submission Details
 
