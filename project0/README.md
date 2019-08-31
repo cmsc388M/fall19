@@ -147,7 +147,7 @@ Next click the play button to see your work in action.
 
 ### Setting the Settings
 
-Now that we know the project works in the editor, let's go ahead and set it up to be built. First we have to add our scene to the build. To do this, open up the _**Build Settings**_ window and click on the _**Add Open Scenes**_ button. Next, switch the target platform to _**Android**_. Finally, we have to change a few _**Player Settings**_. Note that most _**Player Settings**_ are platform-specific (i.e. you have different player settings for Android, iOS, etc.).
+Now that we know the project works in the editor, let's go ahead and set it up to be built. First we have to add our scene to the build. To do this, open up the _**Build Settings**_ window and click on the _**Add Open Scenes**_ button. Next, switch the target platform to _**Android**_. Finally, we have to change a few _**Player Settings**_. Note that most _**Player Settings**_ are platform-specific (i.e. you have a different set of player settings for Android, iOS, etc.).
 
 ![GIF showing how to go open build and player settings](images/settings.gif)
 
