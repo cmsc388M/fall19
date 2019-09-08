@@ -22,34 +22,40 @@ Open up the "Main_Menu" scene in the scenes folder. There are buttons in this sc
 
 ### 2. Implementing Game Logic
 
-Open up the "Level_1" scene in the scenes folder. We have already set up the layout of the level for you, but you are welcome to change it. The objective of this level is to reach the portal at the end of the underwater passageway while obtaining the maximum amount of points by eating fish and avoiding the walls and landmines. The player will control the shark prefab, which already has a camera and mesh attached to it. The game will be played from a first person perspective, so the mesh is not really necessary, but it helps show the dimensions of the shark. Currently, nothing happens when you are in this scene, so it will be your responsibility to get the scene working. It is up to you to decide how you want to design your C# script(s) and what GameObject(s) you will be adding them too.
+Open up the "Level_1" scene in the scenes folder. We have already set up the layout of the level for you, but you are welcome to change it. The objective of this level is to reach the portal at the end of the underwater passageway while obtaining the maximum amount of points by eating fish and avoiding the walls and landmines. The player will control the shark prefab, which already has a camera and mesh attached to it. The game will be played from a first person perspective, so the mesh is not really necessary, but it helps show the dimensions of the shark. Currently, nothing happens when you are in this scene, so it will be your responsibility to get the scene working.
 
 #### Important design constraints and notes
 
 - Read all of functionality and requirements before implementing anything
 
+- All of your code for this project should be created in new file(s). It is up to you to decide how you want to design your C# script(s) and what GameObject(s) you will be adding them too.
+
+- You should not edit any of the scripts that we created or that were already attached to GameObjects in the starter project. They are mainly there to provide additional and/or helper functionality. This document will inform you of anything that you need to know about the included scripts in order to complete the project. You do not have to worry about reading through the code, but you are welcome to do so for your own learning.
+
 - The player has points that are collected when they collide with goldfish and eat them. These points are stored in the _**GameData**_ helper class that we created for you and should only be changed with the static methods `GameData.AddPoints()` and `GameData.ResetPoints()`.
 
-- Switching between scenes should be done with a reference to a _**LevelSwitcher**_ component. This script is already written and you should look over it to understand how it works. If you are going to switch scenes often, it is a good idea to keep all the scene switching logic in one or two classes as you can control how scenes are loaded without having to jump through multiple scripts.
+- Switching between scenes should be done with a reference to a _**LevelSwitcher**_ component. This script has already been written for you. As a general practice, if you are going to switch scenes often, it is a good idea to keep all the scene switching logic in one or two classes as you can control how scenes are loaded without having to jump through multiple scripts. Thus, we recommend that you look over this script to understand how it works.
 
 #### Game Functionality
 
-1. Shark Movement 
+1. Shark Movement
 	- The Shark should constantly be moving forward while the game is not paused.
 	- When the player presses the right or left arrow keys the shark should move to the right or left respectively, but only while the key is pressed. If the game is paused the shark should not move.
 2. Pausing
-	- When the player presses the escape key the game should pause and the "Pause_Menu" GameObject attached to the shark should appear on the screen and the shark will stop moving. If the player presses the escape key while paused, the "Pause_Menu" GameObject will disappear and the shark will continue moving.
+	- When the player presses the escape key, the game should pause. All this means is that the "Pause_Menu" GameObject attached to the shark should appear on the screen and the shark should stop moving. If the player presses the escape key while paused, the "Pause_Menu" GameObject should disappear and the shark should continue moving.
 3. Bumping Into Other Objects
 	- If the shark collides with the portal at the end of the level, the scene should change using a call to `LevelSwitcher.GoToWinScreen()`. In order to call LevelSwitcher functions you must have a reference to a LevelSwitcher object, like the one already present in the scene.
 	- If the shark prefab collides with a rock or a landmine, the Shark should stop moving and the "Lose_Text" GameObject attached to the shark should appear. Then after 2 seconds the level should be reset using a call to `LevelSwitcher.GoToLevelOne()`. The timing on the reset **MUST** be accomplished with a coroutine for full points. Note that the "RockWall_Prefab" and "Landmine_Prefab" are both tagged with a "Die" tag.
 	- If the shark collides with a "Goldfish_Prefab" the player should gain 100 points using the `GameData.AddPoints` function. Note that the goldfish has a trigger collider. A trigger collider is used here because  we don't want eating a goldfish to affect the physics of a player when they are picked up.
 
 ### 3. Decorating The Level 1 Scene
+
 To get you more familiar to the process of creating and using prefabs we would like you guys to add some decorations to the Level 1 Scene and design it a bit. The prefabs are located in the prefabs folder and you can click and drag them into the scene in order to place them.
-1. Place 2+ Goldfish_Prefabs somewhere in the level where the player can pick them up. 
-2. Place 2+ Landmine_Prefabs in places where the player could potentially collide with them. 
-3. Place some of the decorative prefabs found in the /Prefabs/Decorations in the level
-4. Find or create a new mesh and import it into the project and place it in the level as a decoration or obstacle. You can find many free 3D models via the Asset Store (as described in the last project) or at the sites below: 
+
+1. Place 2+ Goldfish_Prefabs somewhere in the level where the player can pick them up.
+2. Place 2+ Landmine_Prefabs in places where the player could potentially collide with them.
+3. Place some of the decorative prefabs found in the /Prefabs/Decorations in the level.
+4. Find or create a new mesh and import it into the project and place it in the level as a decoration or obstacle. You can find many free 3D models via the Asset Store (as described in the last project) or at the sites below:
 
 	- [Poly by Google](https://poly.google.com/)
 	- [SketchFab](https://sketchfab.com/)
@@ -59,10 +65,13 @@ Or you can try to make your own models using modeling software like  [Blender](h
 
 ## Testing Details
 
-Before submitting, make sure to thoroughly test your project to ensure you have implemented all the functionality that we outlined. While grading, we will be looking over your source code to make sure you see your implementation and to ensure that you have adhered to all guidelines and instructions.
+Before submitting, make sure to thoroughly test your project to ensure you have implemented all the functionality that we outlined. You do **not** have to build and test on a mobile phone for this project; using the Unity play mode is perfectly fine.
+
+While grading, we will be looking over your source code to make sure you see your implementation and to ensure that you have adhered to all guidelines and instructions.
 
 ## Submission Details
-Your submission to ELMS should consist of a single zip file, entitled `Last_First_SharkRunner.zip`. **Make sure to use Git to zip your project** (follow the steps from last project if you need a refresher).
+
+Your submission to ELMS should consist of a single zip file, entitled `Last_First_SharkRunner.zip`. **Make sure to use Git to zip your project**. The basic steps involve initializing a new repo, commit all your changes, and using archive to create the zip file (follow the steps from last project if you need a refresher).
 
 
 ## Sources:
