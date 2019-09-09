@@ -44,7 +44,7 @@ Open up the "Level_1" scene in the scenes folder. We have already set up the lay
 2. Pausing
 	- When the player presses the escape key, the game should pause. All this means is that the "Pause_Menu" GameObject attached to the shark should appear on the screen and the shark should stop moving. If the player presses the escape key while paused, the "Pause_Menu" GameObject should disappear and the shark should continue moving.
 3. Bumping Into Other Objects
-	- If the shark collides with the portal at the end of the level, the scene should change using a call to `LevelSwitcher.GoToWinScreen()`. In order to call LevelSwitcher functions you must have a reference to a LevelSwitcher object, like the one already present in the scene.
+	- If the shark collides with the portal at the end of the level, the scene should change using a call to `LevelSwitcher.GoToGameOver()`. In order to call LevelSwitcher functions you must have a reference to a LevelSwitcher object, like the one already present in the scene.
 	- If the shark prefab collides with a rock or a landmine, the Shark should stop moving and the "Lose_Text" GameObject attached to the shark should appear. Then after 2 seconds the level should be reset using a call to `LevelSwitcher.GoToLevelOne()`. The timing on the reset **MUST** be accomplished with a coroutine for full points. Note that the "RockWall_Prefab" and "Landmine_Prefab" are both tagged with a "Die" tag.
 	- If the shark collides with a "Goldfish_Prefab" the player should gain 100 points using the `GameData.AddPoints` function. Note that the goldfish has a trigger collider. A trigger collider is used here because  we don't want eating a goldfish to affect the physics of a player when they are picked up.
 
