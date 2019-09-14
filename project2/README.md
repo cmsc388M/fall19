@@ -1,4 +1,4 @@
-# Project 2: Barrel Murderer
+# Project 2: Barrel Shooter
 
 
 ## Introduction
