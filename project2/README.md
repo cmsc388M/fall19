@@ -1,20 +1,20 @@
-# Project 2: Barrel Shooter
+# Project 2: Barrel Bouncer Part 1
 
 
 ## Introduction
-In for this project you will be creating a very basic Unity project from scratch in order to get you more comfortable with scripting and get you used to Unity's physics system, Instantiation, and raycasting.  This game will be played from a first person perspective and the objective of the game will be destroy all of the barrels placed in the level by left clicking and shooting them with bullets.  Here is a high level outline of the project:
+In for this project you will be creating a very basic Unity project from scratch in order to get you more comfortable with scripting and get you used to Unity's physics system, Instantiation, and raycasting.  This game will be played from a first person perspective and the objective of the game will be destroy all of the barrels placed in the level by left clicking and shooting them with balls.  Here is a high level outline of the project:
 
 1. Create a new Unity Project titled LastName_FirstName_Project2
 2. Build a very basic 3D environment with Unity's terrain tool
 3. Create a simple physics based barrel prefab 
 4. Create a first person character controller
-5. Fire a bullet when left click is pressed
+5. Throw a ball when left click is pressed
 6. Spawn a barrel when right click is pressed
 7. Archive the project with git and submit it on elms.
 
 Bonus Objectives (Totally optional but you can get extra points for them)
 8. Implement jumping on your character controller and make sure your character can only jump when touching the ground.
-9. Figure out how to make a game object that moves towards the player and can be destroyed with a bullet
+9. Figure out how to make a game object that moves towards the player and can be destroyed with a ball
 
 
 ### Building an Environment
@@ -39,8 +39,8 @@ A player controller is a term for a GameObject that the player controls somehow 
 
 Note that all movement should occur relative to the camera, meaning that when the player moves forward they should move in the direction that the camera is facing. Once you have made the player controller, test it and make sure that it collides with physical objects and moves correctly.
 
-### Firing a bullet
-When the left mouse button is clicked the player should fire a bullet in the direction they are facing. The bullet should also be a physical object, be affected by gravity, and collide with stuff. This bullet should be generated via [GameObject.Instantiate](https://docs.unity3d.com/ScriptReference/Object.Instantiate.html). GameObject.Instantiate creates a GameObject at runtime and returns a reference to the created GameObject. You can use this to spawn a bullet, get a reference to it, and then start moving that spawned bullet in some way. The bullet should also be moved using rigidbody functions and should collide with objects. If a bullet collides with a barrel object the barrel should be destroyed. The bullet should then destroy itself regardless of what it hit.
+### Throwing a Ball
+When the left mouse button is clicked the player should throw a ball in the direction they are facing. The ball should also be a physical object, be affected by gravity, and collide with stuff. This ball should be generated via [GameObject.Instantiate](https://docs.unity3d.com/ScriptReference/Object.Instantiate.html). GameObject.Instantiate creates a GameObject at runtime and returns a reference to the created GameObject. You can use this to spawn a ball, get a reference to it, and then start moving that spawned ball in some way. The ball should also be moved using rigidbody functions and should collide with objects. If a ball collides with a barrel object the barrel should be destroyed. After existing for 10 seconds the ball should destroy itseld.
 
 ### Raycasting
 When the right mouse button is pressed a new barrel object should be created 3 Unity units above wherever you clicked. The should be accomplished using the [Physics.RayCast](https://docs.unity3d.com/ScriptReference/Physics.Raycast.html) method. You should raycast from the center of the camera, in the direction the camera is facing, and if you hit something you should spawn a barrel 3 Unity units above that position. There are many different ways to call Physics.Raycast, so to avoid confusion we reccommend that you use a method similar to the script we used in class and described in the slides.
