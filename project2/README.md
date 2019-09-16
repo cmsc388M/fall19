@@ -22,8 +22,9 @@ The first step is to create your own basic 3D environment from scratch for the p
 - On the menu bar, go to `GameObject` -> `3D Object` -> `Terrain`.
 - In the Heirarchy, click on the GameObject titled _**Terrain**_.
 - In the Inspector, explore the Terrain component on the Terrain GameObject and familiarize yourself with the various tools it offes. Use these to form hills, valleys, and mountains in your scenes. Then add textures and color to your terrain, such as dirt, moss, rock, sand, grass, and snow. For reference on how to do this, see [this YouTube video](https://youtu.be/ZwlwCFz9Vvg).
+- You may also add _**Trees**_ if you would like. To add them, go to `GameObject` -> `3D Object` -> `Tree` and experiment with its components.
 
-Note that the tools and textures included in Unity by default are very limited. Luckily, Unity has additional terrain tools in preview and also has some optional brushes and textures to allow you to create even more exciting environments. To access these, you will need to import packages using the Package Manager and the Asset Store, as described below:
+Note that the terrain tools and textures included in Unity by default are very limited. Luckily, Unity has additional terrain tools in preview and also has some optional brushes and textures to allow you to create even more exciting environments. To access these, you will need to import packages using the Package Manager and the Asset Store, as described below:
 
 - On the menu bar, go to `Window` -> `Package Manager`.
 - In the new window that pops up, go to the _**Advanced**_ dropdown menu and check _**Show preview packages**_.
