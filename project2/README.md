@@ -1,6 +1,6 @@
-# Project 2: Barrel Bouncer (Part 1)
+# Project 2: Barrel Bouncer
 
-**Due:** Friday, September 20, 2019 at 4:59:59 AM EDT
+**Due:** Tuesday, September 24, 2019 at 4:59:59 AM EDT
 
 In this project, you will be creating a first-person game where you spawn barrels in a custom environment and then try to break them by throwing balls at them. This project is intended to give you practice with some of the topics learned last class, including Unity's physics system, raycasting, and rotations, and also to serve as an introduction to a few other cool features in Unity.
 
@@ -79,4 +79,4 @@ When the left button of your mouse is clicked, the player should throw a new bal
 
 ## Submission Details
 
-Your submission to ELMS should consist of a single zip file, entitled `Last_First_BarrelBouncer_Part1.zip`. **Make sure to use Git to zip your project**. The basic steps involve initializing a new repo, commit all your changes, and using archive to create the zip file (follow the steps from project 0 if you need a refresher).
+Your submission to ELMS should consist of a single zip file, entitled `Last_First_BarrelBouncer.zip`. **Make sure to use Git to zip your project**. The basic steps involve initializing a new repo, commit all your changes, and using archive to create the zip file (follow the steps from project 0 if you need a refresher).
