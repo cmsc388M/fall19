@@ -21,11 +21,11 @@ In the scene, you may notice a few prefabs that will help you simulate the behav
 
 ## Interactions with Google VR
 
-In this example, all of our interactions will be done using the Pointer GameObject with either World UI gameObjects or interactable 3D gameObjects. This can be done by creating components that implement certain pointerHandler interfaces. Here is an example script that can be attached to a cube in order to make it change color when the pointer passes over, or clicks on it. [This script](/Assets/Scripts/ExamplePointerHandler.cs) is included in the sample project and should be a good example of how to implement basic Pointer Events. When attached to a GameObject, it makes its material change color when the pointer passes over the object, or clicks on it.
+In this example, all of our interactions will be done using the controller pointer gameobject with either World UI gameobjects or interactable 3D gameobjects. The latter can be done by attaching an Event Trigger component to the gameobject and then adding event types related to the pointer. You can then set action(s) that should be performed when each event type occurs. Check out the Cube in the scene to see how this is implemented to make the cube change colors and play audio when the pointer passes over or clicks on it.
 
 ![enter image description here](https://lh3.googleusercontent.com/ZcxA5kMukvzT4YcGyG1ESkjEkimUkOqNN1jdbqp-IEOED93rV57AlBahZ232o5FBrZu31Lm_BHaU)
 
-You can use this script as a template for figuring out how you should add functionality to other objects in the project. The other form of interaction we are going to have in this project is with world scale UI.
+You can use this method as a template for figuring out how you should add functionality to other objects in the project. The other form of interaction we are going to have in this project is with world scale UI.
 
 ### World UI Canvases
 
