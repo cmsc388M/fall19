@@ -8,6 +8,14 @@ In this project, you will expanding upon your [Project 2](https://github.com/cms
 
 When deciding which tools to use to build your VR application in Unity, two particular options emerge: vendor-specific SDKs and the Unity XR APIs. Unity's APIs enable cross-platform VR development, allowing for headset tracking and controller input regardless of which supported VR platform you are targeting (i.e. you can have a single codebase that supports Oculus, Gear VR, Google Daydream, Windows Mixed Reality, etc.). However, they are very barebones outside of these basic functionalities and using it may require you to implement a lot of other setup/interactivity yourself from scratch. On the other hand, vendor-specific SDKs typically only support the vendor's hardware but are more comprehensive. They allow you to take full advantage of the device's capabilties and often include built-in prefabs and components that take care of a lot of the common UX interactions. This allows for more rapid development and more consistent experiences within a particular ecosystem. They also typically have good documentation. For this reason, we have decided to have you use the Google VR SDK to implement the features in this project, in particular focusing on targeting Google Daydream headsets. However, many of the concepts between VR headsets are similar, so if you own another VR headset that you would like to target instead, feel free to use its vendor's SDK or the Unity APIs. Note that this option may be more difficult as we may not be able to help you as much if you get stuck. If you plan to use this option, you should let us know soon.
 
+## About the Google Daydream Hardware
+
+There are two headsets available for the Google Daydream platform: the Google Daydream View and the Lenovo Mirage Solo with Daydream. The former is a 3DOF headset for smartphones, similar to the Samsung Gear VR. A compatible list of phones can be found [here](https://vr.google.com/daydream/smartphonevr/phones/). The latter is a 6DOF standalone VR headset, similar to the Oculus Quest. In either case, the experiences are mostly stationary or within a small confined space.
+
+Both headsets come with a single 3DOF controller. We recommend you familiarize yourself with its layout, buttons, intended functionality, and capabilities before moving further. See the [support page](https://support.google.com/daydream/answer/7184597) and [developer page](https://developers.google.com/vr/discover/controllers) for more info.
+
+Note that while the controller itself is 3DOF, you can achieve 6DoF style controller interactions using an arm model, which we will discuss later.
+
 ## Instructions
 
 At a high level, these are the main tasks that this project involves. Read below for more detailed information about each.
@@ -41,11 +49,15 @@ However, there are some additional player settings that we will need to change t
 
 ![Image showing correct minimum API settings](images/minimum-api.png)
 
-The next thing that you will have to do is remove the Vulkan from the list of Graphics APIs that your app supports. Vulkan is a relatively new cross-platform 3D graphics API with low-overhead and high-performance, and was previously referred to as a "next generation OpenGL initiative". It is included as the default graphics option for the Android platform in Unity but is not currently supported by Unity for XR applications. To remove this, go to the graphics API list under the _**Rendering**_ settings of _**Other Settings**_, click on _**Vulkan**_, and then click on the minus sign.
+The next thing that you will have to do is remove the Vulkan from the list of Graphics APIs that your app supports. Vulkan is a relatively new cross-platform 3D graphics API with low-overhead and high-performance, and was previously referred to as a "next generation OpenGL initiative". It is included as the default graphics option for the Android platform in Unity but is not currently supported by Unity for XR applications. To remove this, go to the graphics API list under the _**Rendering**_ section of _**Other Settings**_, click on _**Vulkan**_, and then click on the minus sign.
 
 ![Image showing removal of Vulkan graphics](images/graphics.png)
 
-Now we will deal directly with the VR specific settings. Go down to the _**XR Settings**_ section of the _**Player Settings**_ and click on the _**Virtual Reality Supported**_ checkbox. Then, under the _**Virtual Reality SDKs**_ list, add support for the _**Daydream**_ platform. Finally, on the _**Stereo Rendering Mode**_ dropdown menu, select the _**Single Pass**_ option. Note that Single Pass Stereo rendering was one of the topics we went over during our discussion of optimizing mobile VR performance. For a refresher on why we use this, please see the first half of [this page on the Unity documentation](https://docs.unity3d.com/Manual/SinglePassStereoRendering.html).
+Since you're already in the _**Rendering**_ section, make sure to enable Static and Dynamic batching, if they aren't already. These are some of the topics we discussed in our discussion of optimizing mobile VR performance. For a refresher on why we use them, please see the first half of [this page on the Unity documentation](https://docs.unity3d.com/Manual/DrawCallBatching.html).
+
+![Image showing batching checkboxes](images/batching.png)
+
+Now we will deal directly with the VR specific settings. Go down to the _**XR Settings**_ section of the _**Player Settings**_ and click on the _**Virtual Reality Supported**_ checkbox. Then, under the _**Virtual Reality SDKs**_ list, add support for the _**Daydream**_ platform. Finally, on the _**Stereo Rendering Mode**_ dropdown menu, select the _**Single Pass**_ option. Note that Single Pass Stereo rendering was also one of the topics we went over during our discussion of optimizing mobile VR performance. For a refresher on why we use this, please see the first half of [this page on the Unity documentation](https://docs.unity3d.com/Manual/SinglePassStereoRendering.html).
 
 ![Image showing correct VR settings](images/vr-settings.png)
 
@@ -63,7 +75,7 @@ In the previous projects, you were introduced to the concepts of packages and ho
 - In the popup Window that appears, make sure that all of the items are selected (they should be by default) and click on the _**Import**_ button.
 - Once this is finished, you will see a _**GoogleVR**_ folder in your project.
 
-### Examples and Resources (Optional)
+### Basic Examples and Resources
 
 At this point, you now know how to complete initial setup and configuration settings of a Google Daydream project, however, you are probably still wondering how you can actually make use of the SDK in your project. A lot of this project will guide you through this, but if you're ever lost or want to see some examples or tutorials to get comfortable before moving forward, the following resources may be helpful:
 
@@ -71,6 +83,24 @@ At this point, you now know how to complete initial setup and configuration sett
 - [This tutorial](https://youtu.be/xz5cP2JdxTM) does a great job at introducing how you can build your own Daydream VR experience from scratch.
 - We have also created our own basic example of a Google VR sample project that you can reference as well. It is a completed version of the tutorial from the previous item with a few modifications. You can take a look at it [here](https://github.com/cmsc388M/fall19/tree/master/examples/GoogleVRSample) (in the examples/GoogleVRSample folder of this repo).
 - The Google VR Documentation, in particular the [guides](https://developers.google.com/vr/develop) and [API Reference](https://developers.google.com/vr/reference).
+
+### Google Daydream Elements (Advanced But Important Samples)
+
+Once you are comfortable with the above examples, you should move on to exploring Daydream Elements. As we mentioned earlier, one reason for using vendor-specific SDKs is that they often have built-in prefabs and components that make it easy to implement UX best practices for the platform. Google has separated these out of their core VR SDK into something they call Daydream Elements, which they describe as follows:
+
+- _Daydream Elements is a collection of Unity tech demos that showcase principles and best practices for developing high-quality VR experiences. The core mechanics in each demo are built to be easily configurable and reusable for your own applications._
+
+You can learn more about Daydream Elements from [this video](https://youtu.be/WxX_Q7VA8No), [this blog post](https://www.blog.google/products/daydream/daydream-elements-foundational-vr-design/) (which was one of the assigned readings), and [the documentation](https://developers.google.com/vr/elements/overview).
+
+Google has released a `.unitypackage` file where you can add Daydream Elements directly into your own app, much like you did before with the Google VR SDK. However, it is not recommended to do this. Google has not updated the project since November 2017 and has since archived the project. This means that it uses an old version of the SDK, and thus has a ton of conflicts and errors that come up when you try to use it with the latest SDK.
+
+Luckily, you can still see how the Daydream Elements examples work using the old SDK, since they have the full Unity project with the old SDK up on GitHub. Additionally, many of the important assets aren't really affected by the conflicts and are still usable with the new SDK. As we mentioned before, Unity makes it easy to import AND export assets for use between projects, and we feel that exporting them from the Daydream Elements project is the best way to go. We'll explore this more in the [teleportation section](#moving-via-teleporation). For now, just focus on trying out and understanding the scenes in this project:
+
+- Download or clone the Daydream Elements project from the [GitHub page](https://github.com/googlevr/daydream-elements) and open up the project using the Unity Hub.
+- Open up the main scene (located in `Assets` -> `DaydreamElements` -> `Main` -> `Scenes`) and click the play button. This will bring up a menu to transport you to a bunch of different scenes that each showcase a particular UX interaction.
+- Once you are done, open up any scenes you found interesting to see how they worked. Two that may be particularly useful for this project are the _**Teleport**_ and the _**ArmModels**_ scenes. 
+
+Simulating this in the Editor is one thing, but actually trying it out on a headset is even more beneficial to helping you understand how these UX mechanisms fit in to the big picture. Google has published the Daydream Elements VR app on the Google Play Store for Android, and we are happy to let you try it out if you come in during office hours.
 
 ### Setting Up Your Scene for Google VR
 
@@ -121,9 +151,17 @@ For this VR version of barrel bouncer we will not be instantiating balls on dema
 
 ### Spatial Audio Feedback
 
-Now you should add spatial audio to the balls whenever they collide with a GameObject. In order to play spatial audio a GameObject needs to have an audio clip component attached to it with the Spatialize bool ticked on:
-![enter image description here](https://docs.microsoft.com/en-us/windows/mixed-reality/images/audiosource.png)
-Whenever the ball hits an object the audio should play the BounceSound audioclip (found in the SampleScripts/Sounds folder) at the given location. The clip should not loop and should play to completion even if the ball is destroyed as a result of that collision.
+For this part, you should add spatial audio to your project in the following ways:
+
+- When a ball is first launched (i.e. right after it leaves your hand), the _**Woosh**_ sound should be played. This sound should follow the ball until its completion.
+- When a ball hits a barrel, the _**Explode**_ sound should be played. This sound should come from the center of the barrel, regardless of where the ball hit the barrel or where it moves afterwards. Like in [project 2](https://github.com/cmsc388M/fall19/tree/master/project2), the barrel should also be destroyed when the ball hits it. Note that you may want to reconsider your approach of "destroying" the barrel.
+- When a ball hits your terrain (or any other non-barrel element of your environment), the _**Bounce**_ sound should be played. This sound should come from the point of the collision, and should not follow the ball's movement.
+
+To make an audio source act spatially, move the slider on the spatial blend setting of your audio source component all the way over to 3D, as shown in the image below.
+
+![Image of audio source component in Unity, with Spatial Blend setting highlighted](images/spatial-audio.png)
+
+There is also an alternative approach to spatial audio that you may consider implementing instead. It is outlined in the [bonus tasks section](#bonus-tasks-optional).
 
 ### Creating the Navigational Menu
 
@@ -145,7 +183,12 @@ if (controller.GetButtonDown(GvrControllerButton.App)){
 
 ### Add Main Menu Scene
 
-As our final step, will add a second scene to our Barrel Bouncer project that will display a 360 photo and will serve as the introductory scene. Make a new scene called "IntroScene" and add all of the neccessary GoogleVR prefabs listed above. Then place a sphere object in the scene, remove its collision, and scale it up so that it surrounds the player. Then add the "FlipMesh" component to the sphere which will invert the sphere and allow us to show a texture on the inside by applying the "SphereMat" material to the sphere. Finally, create a world space UI button with text that reads "Play" and have the button change to the barrel bouncer main scene when it is pressed.
+As our final step, will add a second scene to our Barrel Bouncer project that will display a 360 photo and will serve as the introductory scene. Make a new scene called "IntroScene" and add all of the neccessary GoogleVR prefabs listed above. You should also play an audio track in this room and have it persist throughout the app, similar to what you did in Shark Runner. After this, place a sphere object in the scene, remove its collider, and scale it up so that it surrounds the player. Then add the "FlipMesh" component to the sphere which will invert it and allow us to show a texture on the inside by applying the "SphereMat" material to the sphere. Finally, create a world space canvas with two buttons and a piece of text. The first button should have text that says "Play", and when it is clicked it should change your scene to the BarrelBouncer scene. The other button should read "Quit" and should close the app with Application.Quit(). The text element should be displayed above those buttons and it display random Barrel fun facts. You can make up whatever barrel facts you want and then write a script that changes the text to a different fact every 5 seconds.
+
+### Bonus Tasks (Optional)
+
+- Unity's default audio spatializer is fairly limited in its capabilities: it only considers the volume and position of the sound when making its calculations. As we discussed in class, however, sound can be affected by a variety  of factors, like the medium it travels through (air, wind, snow, water, etc.) and the objects it passes through or reflects off of (walls, ground, barrels, etc.). Google's open-source Resonance Audio SDK allows you to use more realistic spatial audio effects in your scene. Revisit the spatial audio tasks from above and implement them using the Resonance Audio SDK instead. Here is [a blog post](https://blog.google/products/google-ar-vr/open-sourcing-resonance-audio/), [a video](https://youtu.be/IYdx9cnHN8I), and [a getting started guide](https://resonance-audio.github.io/resonance-audio/develop/unity/getting-started.html) about it.
+- For your intro scene, try using adding in a 360 video instead of just a 360 photo. To do this, you will have to explore the concept of render textures. Check out [this tutorial](https://youtu.be/hmCxXFY-JHs) for more info.
 
 ## Submission Details
 
