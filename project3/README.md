@@ -2,7 +2,7 @@
 
 **Due:** Friday, October 25, 2019 at 4:59:59 AM EDT
 
-In this project, you will expanding upon your [Project 2](https://github.com/cmsc388M/fall19/tree/master/project2) submission and transforming it into a VR experience, where you can pick up and throw the balls with a controller and also be transported inside of a barrel. This project is intended to give you hands-on practice with some of the VR user experience guidelines and performance optimization techniques that you were introduced to in the readings and in class.
+In this project, you will expanding upon your [Project 2](https://github.com/cmsc388M/fall19/tree/master/project2) submission and transforming it into a VR experience, where you can pick up and throw the balls with a controller and hear spatial audio feedback of the interactions around you. This project is intended to give you hands-on practice with some of the VR user experience guidelines and performance optimization techniques that you were introduced to in the readings and in class.
 
 ## A Note About VR SDKs
 
@@ -10,7 +10,7 @@ When deciding which tools to use to build your VR application in Unity, two part
 
 ## About the Google Daydream Hardware
 
-There are two headsets available for the Google Daydream platform: the Google Daydream View and the Lenovo Mirage Solo with Daydream. The former is a 3DOF headset for smartphones, similar to the Samsung Gear VR. A compatible list of phones can be found [here](https://vr.google.com/daydream/smartphonevr/phones/). The latter is a 6DOF standalone VR headset, similar to the Oculus Quest. In either case, the experiences are mostly stationary or within a small confined space.
+There are two headsets available for the Google Daydream platform: the Google Daydream View and the Lenovo Mirage Solo with Daydream. The former is a 3DOF headset for smartphones, similar to the Samsung Gear VR. A list of compatible phones can be found [here](https://vr.google.com/daydream/smartphonevr/phones/). The latter is a 6DOF standalone VR headset, similar to the Oculus Quest. In either case, the experiences are mostly stationary or within a small confined space.
 
 Both headsets come with a single 3DOF controller. We recommend you familiarize yourself with its layout, buttons, intended functionality, and capabilities before moving further. See the [support page](https://support.google.com/daydream/answer/7184597) and [developer page](https://developers.google.com/vr/discover/controllers) for more info.
 
@@ -25,9 +25,10 @@ At a high level, these are the main tasks that this project involves. Read below
 - Modify your 3D environment to better suit the new functionality and optimize it for performance.
 - Implement teleportation functionality for easy movement around your scene.
 - Add controller-based interactivity to the balls so they can be picked up and thrown.
-- Insert spatial audio effects to provide feedback when the ball hits a barrel.
-- Build world-space user interfaces to provide user with helpful cues and to have a "main menu" for the app.
-- Create a basic 360° photo scene to place you "inside" of a barrel and design a way to switch between the two scenes.
+- Insert spatial audio effects to provide feedback based on ball interactions.
+- Create a navigational app menu to allow user to reset level or go back to intro scene (next bullet).
+- Build a new "intro scene" to the app using 360° photo, music, and a world-space user interface.
+- Handle scene management for switching between the scenes.
 - Build and deploy your apk file to a supported Android device and test your app in a Daydream headset.
 - Use Git to create a zip file of the your project and submit it via ELMS.
 
@@ -53,7 +54,7 @@ The next thing that you will have to do is remove the Vulkan from the list of Gr
 
 ![Image showing removal of Vulkan graphics](images/graphics.png)
 
-Since you're already in the _**Rendering**_ section, make sure to enable Static and Dynamic batching, if they aren't already. These are some of the topics we discussed in our discussion of optimizing mobile VR performance. For a refresher on why we use them, please see the first half of [this page on the Unity documentation](https://docs.unity3d.com/Manual/DrawCallBatching.html).
+Since you're already in the _**Rendering**_ section, make sure to enable Static and Dynamic batching, if they aren't already. These are some of the topics we discussed in our discussion of optimizing mobile VR performance. For a refresher on why we use them, please see [this page on the Unity documentation](https://docs.unity3d.com/Manual/DrawCallBatching.html).
 
 ![Image showing batching checkboxes](images/batching.png)
 
@@ -70,19 +71,20 @@ By applying these settings, Unity now knows that this is a VR app and will take 
 In the previous projects, you were introduced to the concepts of packages and how to import them into your project using the _**Asset Store**_ and the _**Package Manager**_. However, Unity also makes it easy to import and export your own custom packages outside of these distribution channels. Packages are stored with the file extension `.unitypackage`. In this part, you will be downloading the Google VR SDK unitypackage and adding that into your project.
 
 - Using your web browser, navigate to this link: https://github.com/googlevr/gvr-unity-sdk/releases/latest
-- Under the "Assets" section, click on the .unitypackage file to download it. It is typically the first item and will be named like `GoogleVRForUnity_1.200.1.unitypackage`.
+- Under the "Assets" section, click on the .unitypackage file to download it. It is typically the first item and will be named something like `GoogleVRForUnity_1.200.1.unitypackage`.
 - In your Unity project, go to `Assets` -> `Import Package` -> `Custom Package` and use your computer's file explorer to select the file that you downloaded.
 - In the popup Window that appears, make sure that all of the items are selected (they should be by default) and click on the _**Import**_ button.
 - Once this is finished, you will see a _**GoogleVR**_ folder in your project.
 
 ### Basic Examples and Resources
 
-At this point, you now know how to complete initial setup and configuration settings of a Google Daydream project, however, you are probably still wondering how you can actually make use of the SDK in your project. A lot of this project will guide you through this, but if you're ever lost or want to see some examples or tutorials to get comfortable before moving forward, the following resources may be helpful:
+At this point, you now know how to complete initial setup and configuration settings of a Google Daydream project, however, you are probably still wondering how you can actually make use of the SDK in your project. This might be a good time to check out the following examples to get a basic understanding of how Google VR scenes are structured:
 
 - Google includes its very own example of a Daydream VR scene within the package that you imported. Navigate to `Assets` -> `GoogleVR` -> `Demos` -> `Scenes` and open up the _**HelloVR**_ scene so you can see how the project is structured. This is also a good scene to get practice with using the Editor and Controller emulators that you can later use to test your own scene.
 - [This tutorial](https://youtu.be/xz5cP2JdxTM) does a great job at introducing how you can build your own Daydream VR experience from scratch.
 - We have also created our own basic example of a Google VR sample project that you can reference as well. It is a completed version of the tutorial from the previous item with a few modifications. You can take a look at it [here](https://github.com/cmsc388M/fall19/tree/master/examples/GoogleVRSample) (in the examples/GoogleVRSample folder of this repo).
-- The Google VR Documentation, in particular the [guides](https://developers.google.com/vr/develop) and [API Reference](https://developers.google.com/vr/reference).
+
+Another great resource you can refer to as you develop your project is the Google VR Documentation, in particular the [guides](https://developers.google.com/vr/develop) and [API Reference](https://developers.google.com/vr/reference).
 
 ### Google Daydream Elements (Advanced But Important Samples)
 
@@ -90,7 +92,7 @@ Once you are comfortable with the above examples, you should move on to explorin
 
 - _Daydream Elements is a collection of Unity tech demos that showcase principles and best practices for developing high-quality VR experiences. The core mechanics in each demo are built to be easily configurable and reusable for your own applications._
 
-You can learn more about Daydream Elements from [this video](https://youtu.be/WxX_Q7VA8No), [this blog post](https://www.blog.google/products/daydream/daydream-elements-foundational-vr-design/) (which was one of the assigned readings), and [the documentation](https://developers.google.com/vr/elements/overview).
+You can learn more about Daydream Elements from [this video](https://youtu.be/WxX_Q7VA8No), [this blog post](https://www.blog.google/products/daydream/daydream-elements-foundational-vr-design/) (from the assigned readings), and [the documentation](https://developers.google.com/vr/elements/overview).
 
 Google has released a `.unitypackage` file where you can add Daydream Elements directly into your own app, much like you did before with the Google VR SDK. However, it is not recommended to do this. Google has not updated the project since November 2017 and has since archived the project. This means that it uses an old version of the SDK, and thus has a ton of conflicts and errors that come up when you try to use it with the latest SDK.
 
@@ -139,19 +141,113 @@ If you looked at the Google HelloVR example, you may notice that we didn't add t
 
 ### Modifying Your Environment
 
-In this section, you will be modifying your environment to optimize for performance with occlusion culling and will place barrels around the scene, since you will no longer be spawning them at runtime. You will also import a model of a basket and place balls into them.
+In this section, you will be modifying your environment to better fit our new scenario and to optimize it for mobile VR performance.
+
+#### Beefing Up or Swapping Your Terrain
+
+This project will not directly grade you on your ability to create a terrain. However, you will have to implement and test occlusion culling on your environment, as described [here](#occlusion-culling). This means that if your environment is not complex enough to _easily_ test and verify that occlusion culling is working (i.e. if you only created a few mountains and hills), you will have to edit your terrain to make it more suitable for this task.
+
+Alternatively, if you did not like using the Terrain editor, felt it had too much of a performance impact on your workflow, or would just prefer a different kind of environment in general (like a bustling city or a wild west desert), feel free to delete your terrain and replace it with a different environment. The _**Asset Store**_ has plenty of [free 3D environments](https://assetstore.unity.com/3d/environments?category=3d%2Fenvironments&free=true&orderBy=1) that are ready to use. Low poly environments typically perform well in mobile VR. Like before, the most important thing is to make sure there is enough going on in the scene to easily test occlusion culling.
+
+#### Adding Barrels Into Scene
+
+In this version of the project, you will not be spawning barrels via Raycasting. Rather, they will already be pre-placed within your environment.
+
+Go ahead and place 10+ barrels into your scene. Make sure to have them in a variety of distances and directions from the player's initial starting position.
+
+#### A Bucket for Balls
+
+Go to the _**Asset Store**_ and import a bucket or trash bin to your project. Place it somewhere in your scene near your player's starting position, and then place five instances of your ball prefab inside of it. Your ball prefabs should be roughly the size of a tennis ball. Feel free to resize any of these items as necessary.
+
+#### Occlusion Culling
+
+Next, we will set up your scene to take advantage of occlusion culling, another one of the topics we went over during our discussion of optimizing mobile VR performance. The [Unity documentation](https://docs.unity3d.com/Manual/OcclusionCulling.html) does a great job at taking you through the steps to achieve and test this.
+
+Make sure to set any non-movable elements of your environment (i.e. not the balls or barrels) to static before baking your scene. Additionally, you should set them to fully static as opposed to just the _**Occluder Static**_ and _**Occludee Static**_ that is mentioned in the docs. This will allow it to take advantage of batching and the lighting optimizations in the next section as well.
+
+The _**2 by 3**_ Editor layout is particularly useful when testing your scene for occlusion culling. The GIFs below show how an example terrain is being rendered with frustrum culling (enabled in Unity by default) vs. with occlusion culling.
+
+| Frustrum Culling (Default) | Occlusion Culling |
+| ------------- | ------------- |
+| ![GIF showing gameplay with frustrum culling](images/frustrum-culling.gif) | ![GIF showing gameplay with occlusion culling](images/occlusion-culling.gif) |
+
+#### Lighting Optimization
+
+Realtime global lighting during runtime can allow you to achieve very realistic results, but it comes at a significant cost to the performance. Hence, it is recommended to disable this in mobile VR and just used baked lighting instead.
+
+- In the menu bar, go to `Window` -> `Rendering` -> `Lighting Settings`.
+- Unselect the _**Realtime Global Illumination**_ checkbox from the _**Realtime Lighting**_ section.
+- Unselect the _**Auto Generate**_ checkbox at the bottom of the window and then click on the _**Generate Lighting**_ button. This will create your baked lightmaps. Note that this step may take a while to complete, depending on the complexity of your environment and the specifications of your machine.
 
 ### Moving via Teleporation
 
-In the barrel bouncer scene we are going to move via teleportation. When the pointer is touching a static object, like the terrain gameObject in your scene, and they click, they should teleport to that object. If the pointer is clicked on the barrels, balls, or UI elements in the scene the user **should not** teleport to them and should remain in place instead. If you want to get the world location of the pointer you can use the the [PointerEventData](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/api/UnityEngine.EventSystems.PointerEventData.html) class like we did in the example script, or you can get the transform of the pointer via GvrPointerInputModule.Pointer.PointerTransform. It is up to you how you want to implement this method, just make sure that teleportation is only possible on non moving static gameObjects and that you cant teleport onto UI or into the air.
+Here we will revisit the Daydream Elements project since it already has a really nice implementation of teleportation. As we stated before, Unity makes it really simple to export assets for use in other projects. In this section, we will be exploring the process you should go through to accomplish this.
+
+First, open up the _**Teleport**_ scene in the Daydream Elements project. If you explore the scene, you will notice that all the functionality related to teleporting appears to be on the _**TeleportController**_ GameObject that was added as a child to the GvrControllerPointer under the Player. If we take a look at this further, we see that the _**TeleportController**_ is a prefab, and we can then select the prefab to find its location within the project window (`Assets` -> `DaydreamElements` -> `Elements` -> `Teleport` -> `Prefabs`). Then right-click on the prefab, and click on _**Export Package**_. You will see that a Window pops up with a bunch of items to export. This is beause Unity tries to consider all the dependencies of the object(s) you want to export as well.
+
+So all that is left to do now is click on the _**Export**_ button, right? In theory, it should that simple. However, Unity's understanding of a "dependency" is somewhat flawed. It doesn't just consider what is necessary to make the prefab work, it considers everything that's related to it: what scenes is it in, what objects are in that scene, what other prefabs are in that scene, what other scenes are those prefabs in, what scripts/materials/etc. do all of those prefabs have on them, and do they have references to other scripts, etc. In the end, it seems like you're pretty much exporting the entire Daydream Elements folder, which is not what we want, since as we discussed, references it will cause errors with the newer Google VR SDK version.
+
+Instead, you should analyze the prefab in the inspector to see what scripts/components are attached and what references they have to other scripts, prefabs, materials, etc. Then, you should use this information to determine what you should export.
+
+Ultimately, only the following items should be selected:
+- Everything in the Triggers folder (located in `DaydreamElements` -> `Common` -> `Scripts` -> `Utility` -> `Triggers`)
+- The followingg items within the Teleport folder (`DaydreamElements` -> `Elements` -> `Teleport`)
+  - LaserSpark.mat (located in `Demo` -> `Materials`
+  - Everything within each of the following folders:
+    - Materials
+    - Models
+    - Prefabs
+    - Scripts
+    - Shaders
+    - Textures
+
+Now you can click on the _**Export**_ button and save it as a `.unitypackage` file. Then you can import it into your project in the same way that you imported the Google VR SDK. Note that if you ever forget something that is relevant, you may get an error to a missing reference, but Unity will tell you what you're missing a reference to so that you can manually export that asset over as well.
+
+Once you have done, that, analyze the setup of the TeleportController in the Daydream Elements scene, and use that information to appropriately set it up within your scene. Specifically, you will notice that it is a child gameobject of the GVRControllerPointer and that its TeleportController script has a reference to the player and the controller gameobjects in the scene.
+
+Finally, you should be able to teleport in your scene like this:
+
+![Image of teleportation](images/teleport.gif)
 
 ### Making Balls Interactable
 
-For this VR version of barrel bouncer we will not be instantiating balls on demand, instead we will make a new ball prefab that can be picked up via the pointer and thrown. When the pointer is hovering over a ball and the click button is pressed and held down, the ball should snap in front of the controller and remain there until the click is released. An easy way to make the ball remain in front of the controller would be to parent the ball to the controller while the click button is still pressed down.  When the click button is released the ball should fly forward in the direction the controller was pointing and destroy any barrel it comes into contact with similar to the first project. Once you have made a gameObject that does this, make it into a prefab and place a couple of them into the scene.
+In this version of Barrel Bouncer, you will not be instantiating balls on demand, but instead will be picking them up from the bucket and throwing them. Essentially, when your controller collides with the ball, you can then press and hold the touchpad to hold it, and then swing your arm and release the button to throw it. The Daydream Elements already has an example of this in the ArmModels scene. It is your task to examine the scene to determine what you need to export over.
+
+Additionally, you should add cues to allow the user to know when the ball is being collided with and when it is being held. A good way to do this is by changing the color of the ball depending on what is happening. See the [sample project](https://github.com/cmsc388M/fall19/tree/master/examples/GoogleVRSample) for a great example of this.
+
+Finally, the balls should still follow the same basic behaviors from the previous project. In other words, it should still bounce, act as per the laws of physics, destroy barrels upon collision with them, and destroy itself 5 seconds after being thrown. You may need to adjust some of your implementations to get it to work with this new setup.
+
+### Switching Modes
+
+You may notice a problem now: both the teleportation and ball throwing functionality want to use the same buttons. Since there are a limited number of inputs from the Daydream controller, we will have two different modes: teleporting mode and ball-throwing mode. In the teleporting mode, the user should be able to teleport, but should not be able to interact with the ball. Similarly, the user should not be able to teleport in the ball-throwing mode. The user should switch between the modes by clicking the app button.
+
+In order to poll the input for the Daydream controller you will have to use a special input function from the GvrControllerInputDevice class. To do this first get a reference to the current controller instance with this code
+
+``` csharp
+GvrControllerInputDevice controller = GvrControllerInput.GetDevice(GvrControllerHand.Dominant)
+```
+
+and then poll that controller for the App Button input like so:
+
+``` csharp
+if (controller.GetButtonDown(GvrControllerButton.App)) {
+    //Do stuff here
+}
+```
+
+See the [Google VR documentation](https://developers.google.com/vr/reference/unity/class/GvrControllerInputDevice) for more details.
+
+### Useful Tooltips
+
+It is always a good practice to place tooltips on the controller to let the user know how to interact with the app and what each button does. Add relevant tooltips that give the player instructions based on the mode that they are in.
+
+Here is an example of what the tooltips look like in the Daydream Elements teleport scene:
+
+![Image showing example tooltips on controller](images/tooltips.png)
 
 ### Spatial Audio Feedback
 
-For this part, you should add spatial audio to your project in the following ways:
+We have created a set of assets you should import into your scene. Once you have done that, you should add spatial audio to your project in the following ways:
 
 - When a ball is first launched (i.e. right after it leaves your hand), the _**Woosh**_ sound should be played. This sound should follow the ball until its completion.
 - When a ball hits a barrel, the _**Explode**_ sound should be played. This sound should come from the center of the barrel, regardless of where the ball hit the barrel or where it moves afterwards. Like in [project 2](https://github.com/cmsc388M/fall19/tree/master/project2), the barrel should also be destroyed when the ball hits it. Note that you may want to reconsider your approach of "destroying" the barrel.
@@ -170,20 +266,24 @@ We are now going to make a World Space Menu that the user can activate and deact
 - Restart Level - The text attached to the button should be changed to "Restart Level", and when the button is clicked it should restart the current scene.
 - Main Menu - The text should read "Return to Main Menu" and should move the player to the intro scene.
 
-Once you have created the menu, the user should be able to open and close the menu using by pressing the app button on the DayDream controller, similar to the pause menu functionality in Shark Runner. In order to poll the input for the Daydream controller you will have to use a special input function from the GvrControllerInputDevice class. To do this first get a reference to the current controller instance with this code
-```
-GvrControllerInputDevice controller  = GvrControllerInput.GetDevice(GvrControllerHand.Dominant)
-```
-and then poll that controller for the App Button input like so:
-```
-if (controller.GetButtonDown(GvrControllerButton.App)){
-//Do stuff here
-}
-```
+Once you have created the menu, the user should be able to open and close the menu using by pressing and holding down the app button on the DayDream controller, similar to the pause menu functionality in Shark Runner.
 
-### Add Main Menu Scene
+### Add Intro Scene
 
-As our final step, will add a second scene to our Barrel Bouncer project that will display a 360 photo and will serve as the introductory scene. Make a new scene called "IntroScene" and add all of the neccessary GoogleVR prefabs listed above. You should also play an audio track in this room and have it persist throughout the app, similar to what you did in Shark Runner. After this, place a sphere object in the scene, remove its collider, and scale it up so that it surrounds the player. Then add the "FlipMesh" component to the sphere which will invert it and allow us to show a texture on the inside by applying the "SphereMat" material to the sphere. Finally, create a world space canvas with two buttons and a piece of text. The first button should have text that says "Play", and when it is clicked it should change your scene to the BarrelBouncer scene. The other button should read "Quit" and should close the app with Application.Quit(). The text element should be displayed above those buttons and it display random Barrel fun facts. You can make up whatever barrel facts you want and then write a script that changes the text to a different fact every 5 seconds.
+Finally, you will create an introductory scene for your app with a 360 photo.
+
+- Create a new scene.
+- Set up the scene for use with Google VR
+- Add a new sphere into your scene and remove its collider. Then, scale it and position it as necessary so that the player is inside of and surround by the sphere.
+- Find a 360 photo online that you would like to use and import it into your project.
+- Create a new material and add your photo onto it. Then apply it onto your cube.
+- Attach the _**FlipMesh**_ script onto your sphere. You should now be able to see the 360 image in your game view.
+- Adjust your sphere's size and position again, if necessary, in order to make everything appear at a life-like scale.
+- Create a world-space UI in your scene. Unlike the previous scene, it does not appear and disappear based on controller input, but rather is always present in the scene. It should be placed in front of the player's initial starting position at a distance where it is easily readable. The UI should accomplish the following:
+  - At the top should be a large text in bold with the name of the game.
+  - Under that you should have a smaller (but still readable) italic text that is supposed to display a fact about barrels. Come up with a list of at least 5 facts about barrels and then create a script that randomly switches the fact that is displayed every five seconds.
+  - Finally, you will have 2 buttons. One should read "Play" and should load up the game when pressed. The other should read "Exit" and should quit the application when pressed. Note that this final one is only testable on an actual device (i.e. not in the Editor).
+- Select a music track of your choice and import it into your project. Then have it play in a 2D mode at the start of the scene. It should always repeat upon completion but only within this scene (i.e. it does not have to be persistent between scenes). 
 
 ### Bonus Tasks (Optional)
 
