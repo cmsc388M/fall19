@@ -1,6 +1,6 @@
 # Project 3: Barrel Bouncer VR Edition
 
-**Due:** Friday, October 25, 2019 at 4:59:59 AM EDT
+**Due:** Wednesday, October 30, 2019 at 4:59:59 AM EDT
 
 In this project, you will expanding upon your [Project 2](https://github.com/cmsc388M/fall19/tree/master/project2) submission and transforming it into a VR experience, where you can pick up and throw the balls with a controller and hear spatial audio feedback of the interactions around you. This project is intended to give you hands-on practice with some of the VR user experience guidelines and performance optimization techniques that you were introduced to in the readings and in class.
 
@@ -26,9 +26,7 @@ At a high level, these are the main tasks that this project involves. Read below
 - Implement teleportation functionality for easy movement around your scene.
 - Add controller-based interactivity to the balls so they can be picked up and thrown.
 - Insert spatial audio effects to provide feedback based on ball interactions.
-- Create a navigational app menu to allow user to reset level or go back to intro scene (next bullet).
-- Build a new "intro scene" to the app using 360° photo, music, and a world-space user interface.
-- Handle scene management for switching between the scenes.
+- Create a main menu to allow user to restart or exit the game.
 - Build and deploy your apk file to a supported Android device and test your app in a Daydream headset.
 - Use Git to create a zip file of the your project and submit it via ELMS.
 
@@ -106,7 +104,7 @@ Simulating this in the Editor is one thing, but actually trying it out on a head
 
 ### Setting Up Your Scene for Google VR
 
-The first step is to delete your character controller's gameobject as well as any other cameras that may be present in the scene. You will instead be setting up and using a new GameObject for your player in your scene, which is described later in this section.
+We will now move back to your Barrel Bouncer project. The first step is to delete your character controller's gameobject as well as any other cameras that may be present in the scene. You will instead be setting up and using a new GameObject for your player in your scene, which is described later in this section.
 
 Next, you will need to add a couple of new GameObjects to your scene that are included as prefabs within the Google VR SDK. Make sure that each of these are at a position of (0, 0, 0) when you add them.
 
@@ -132,7 +130,7 @@ Next, you will need to add a couple of new GameObjects to your scene that are in
 Next, we will be creating our _**Player**_ GameObject. This will be the parent object for your camera and your controller model, allowing them to move together. Note that this is a similar setup to Google's HelloVR example scene.
 
 - Create an empty GameObject and name it "Player". Set its position to (0, 1.6, 0).
-- In the heirarchy, right-click on your Player GameObject and add a Camera as a child GameObject. Make sure the Camera's local coordinates are set to (0, 0, 0) and set its tag to "MainCamera".
+- In the heirarchy, right-click on your Player GameObject and add a Camera as a child GameObject. Set the Camera's local coordinates to (0, 0, 0), set its _**Tag**_ to "MainCamera", and change its _**Near Clipping Plane**_ to 0.01.
 - Go to `Assets` -> `GoogleVR` -> `Prefabs` -> `Controller` and drag the prefab entitled GvrControllerPointer onto your Player GameObject in your heirarchy. This will create an instance of it as a child object of your player. Make sure to set its local coordinates to (0, 0, 0) as well.
   - This prefab places a 3D model of a Daydream controller into your scene that will sync up to the movements of the actual Daydream motion controller in your final app. It also has a built-in laser pointer and includes an [arm model](https://developers.google.com/vr/elements/arm-model) to estimate the location and positional movements of your controller, despite it being a 3DOF device (i.e. the controller's sensors only track rotation, not positional movement, but uses known measurements about a typical person's arm to calculate where your controller is located relative to your camera/head).
 - Finally, add the component _**Gvr Pointer Physics Raycaster**_ to your camera. This script will allow your pointer to raycast onto 3D objects in your scene, allowing you to interact with them.
@@ -157,7 +155,9 @@ Go ahead and place 10+ barrels into your scene. Make sure to have them in a vari
 
 #### A Bucket for Balls
 
-Go to the _**Asset Store**_ and import a bucket or trash bin to your project. Place it somewhere in your scene near your player's starting position, and then place five instances of your ball prefab inside of it. Your ball prefabs should be roughly the size of a tennis ball. Feel free to resize any of these items as necessary.
+Go to the _**Asset Store**_ and import a bucket or trash bin to your project. Place it in the scene as a child gameobject of the player, somewhere right in front of them near their waist level so that they can realistically reach into it. Then, place five instances of your ball prefab inside of it, as child gameobjects of the bucket. Feel free to resize any of these items as necessary.
+
+Note that your bucket should not have a rigidbody or collider, so remove these if necessary. It is also alright for now if your balls are just falling to the ground. We will fix this in a later section.
 
 #### Occlusion Culling
 
@@ -211,17 +211,25 @@ Finally, you should be able to teleport in your scene like this:
 
 ### Making Balls Interactable
 
-In this version of Barrel Bouncer, you will not be instantiating balls on demand, but instead will be picking them up from the bucket and throwing them. Essentially, when your controller collides with the ball, you can then press and hold the touchpad to hold it, and then swing your arm and release the button to throw it. The Daydream Elements already has an example of this in the ArmModels scene. It is your task to examine the scene to determine what you need to export over.
+In this version of Barrel Bouncer, you will not be instantiating balls on demand, but instead will be picking them up from the bucket and throwing them. Essentially, when your controller collides with the ball, you can then press and hold the touchpad to hold it, and then swing your arm and release the button to throw it. The Daydream Elements already has an example of this in the ArmModels scene. Go ahead and take a look at how it works.
 
-Additionally, you should add cues to allow the user to know when the ball is being collided with and when it is being held. A good way to do this is by changing the color of the ball depending on what is happening. See the [sample project](https://github.com/cmsc388M/fall19/tree/master/examples/GoogleVRSample) for a great example of this.
+While there is a lot going on in this scene, you will want to pay special attention to the ThrowArm prefab and its relationship and properties within the scene. Within the heirarchy, it is located in Player -> ModesArmModel -> ThrowArm -> GvrControllerPointer -> ThrowArm.
+
+It is your task to examine the ThrowArm prefab and instance to determine what you need to export over and to determine how to correctly set up the ThrowArm within your scene. Remember, all assets you will need to export are contained within the "DaydreamElements" folder. You should not export anything from the "GoogleVR" folder, since you already have a newer version of the SDK in your Barrel Bouncer project and do no want to overwrite it. During setup, you should place careful attention to the changes made to both the ThrowArm and the GvrControllerPointer instances within the example scene so that you can make sure to apply the same changes to your own scene. It is also completely fine to add the ThrowArm as a child of the GvrControllerPointer instance inside of your scene even though it already has the TeleportController as well. You will manage toggling between these in the [next section (switching modes)](#switching-modes). The final heirarchy of your player at this point might look something like this:
+
+![Image showing Player heirarchy](images/heirarchy.png)
+
+Note that you do not have to copy over the _**Ball Grabber**_ script. We are providing an edited and simplified version of it to you. You can obtain this by importing `Project3NewAssets.unitypackage`, found within the project3 folder. This contains a few other assets as well that you will use in later sections of this project.
+
+Once you have correctly set up your ThrowArm, you should be able to grab any object with the _**Throwable**_ component. Go ahead and add _**Throwable**_ to your ball prefab, so that you are able to throw it. You may also notice that your balls now stay in place until you actually throw them. Note that you will have to be extremely close to your ball in order to pick it up. You may have to adjust the scales, sizes, and distances of your balls and bucket in order to get this behavior to work correctly.
 
 Finally, the balls should still follow the same basic behaviors from the previous project. In other words, it should still bounce, act as per the laws of physics, destroy barrels upon collision with them, and destroy itself 5 seconds after being thrown. You may need to adjust some of your implementations to get it to work with this new setup.
 
 ### Switching Modes
 
-You may notice a problem now: both the teleportation and ball throwing functionality want to use the same buttons. Since there are a limited number of inputs from the Daydream controller, we will have two different modes: teleporting mode and ball-throwing mode. In the teleporting mode, the user should be able to teleport, but should not be able to interact with the ball. Similarly, the user should not be able to teleport in the ball-throwing mode. The user should switch between the modes by clicking the app button.
+You may notice a problem now: both the teleportation and ball throwing functionality want to use the same buttons. Since there are a limited number of inputs from the Daydream controller, we will have two different modes: teleport mode and throw mode. In the teleport mode, the user should be able to teleport, but should not be able to interact with the balls. Similarly, the user should not be able to teleport in the throw mode. Additionally, the bucket of balls should only be visible in the throw mode. In your implementation, make sure to consider all gameobjects, components, and properties that make the TeleportationController and the ThrowArm work properly, so that you can toggle between the appropriate settings required to make them functional.
 
-In order to poll the input for the Daydream controller you will have to use a special input function from the GvrControllerInputDevice class. To do this first get a reference to the current controller instance with this code
+The user should switch between the modes by clicking the app button. In order to poll for input from the Daydream controller you will have to use a special input function from the [GvrControllerInputDevice class](https://developers.google.com/vr/reference/unity/class/GvrControllerInputDevice). To do this first get a reference to the current controller instance with this code
 
 ``` csharp
 GvrControllerInputDevice controller = GvrControllerInput.GetDevice(GvrControllerHand.Dominant)
@@ -235,15 +243,25 @@ if (controller.GetButtonDown(GvrControllerButton.App)) {
 }
 ```
 
-See the [Google VR documentation](https://developers.google.com/vr/reference/unity/class/GvrControllerInputDevice) for more details.
+We have also provided a sample script within our unitypackage that not only shows you an example of this, but also how to differentiate between short clicks and long presses (aka press and hold) using a timer since you will need to use the latter to open and close your main menu as well.
 
 ### Useful Tooltips
 
-It is always a good practice to place tooltips on the controller to let the user know how to interact with the app and what each button does. Add relevant tooltips that give the player instructions based on the mode that they are in.
+It is always a good practice to place tooltips on the controller to let the user know how to interact with the app and what each button does. In this section, you will add relevant tooltips that give the player instructions based on the mode that they are in.
 
-Here is an example of what the tooltips look like in the Daydream Elements teleport scene:
+The Google VR SDK already provides a sample tooltips template that you can easily use and modify to fit your app's needs. It is called _**GvrControllerTooltipsTemplate.prefab**_ and is located in `Assets` -> `Google VR` -> `Prefabs` -> `Controller` -> `Tooltips`. This particular template is implemented using a regular world-space UI canvas, which means it is easily customizable through all the UI tools and features that Unity already provides.
 
-![Image showing example tooltips on controller](images/tooltips.png)
+We have already created two copies of this prefab for you (one for each mode), which you can find in `Assets` -> `Prefabs` -> `Tooltips`. You should edit their texts to match the following examples:
+
+| Teleport Mode Tooltips | Throwing Mode Tooltips |
+| ------------- | ------------- |
+| ![Image showing what the controller tooltips should look like in teleport mode](images/teleport-tooltips.png) | ![Image showing what the controller tooltips should look like in throwing mode](images/throw-tooltips.png) |
+
+Once you have edited the prefabs, you will have to let the GvrController know about your new tooltips so that it will use those instead. As shown in the image below, Google VR keeps track of the tooltips via an array of gameobjects called _**Attachment Prefabs**_ on its _**Gvr Controller Visual**_ script, which is a component of the _**ControllerVisual**_ gameobject (one of the children of the _**GvrControllerPointer**_ gameobject). The gameobjects in the attachment prefabs are then instantiated at runtime as children of the _**ControllerVisual**_ gameobject.
+
+![Image showing where to drag tooltips prefabs](images/tooltips-placement.png)
+
+Go ahead and change the size of _**Attachment Prefabs**_ to 2 and then drag your two prefabs into its elements. Once you do this, you will notice that both tooltips appear on your controller during gameplay, overlapping each other. Thus, you should edit your switching modes script to account for using the correct tooltips as well. Note that you will have to get a reference to them during runtime (i.e. not just by dragging the tooltips) in your script since they are only instantiated during runtime.
 
 ### Spatial Audio Feedback
 
@@ -259,36 +277,33 @@ To make an audio source act spatially, move the slider on the spatial blend sett
 
 There is also an alternative approach to spatial audio that you may consider implementing instead. It is outlined in the [bonus tasks section](#bonus-tasks-optional).
 
-### Creating the Navigational Menu
+### Creating the Main Menu
 
-We are now going to make a World Space Menu that the user can activate and deactivate by pressing the app button. **The menu should always appear in front of the user when it is brought up, even after the user teleports.** To make the menu first make a world space canvas with 2 Buttons:
+We are now going to make a main menu that the user can open and close by pressing and holding down the app button on the DayDream controller, similar to the pause menu functionality in Shark Runner.
 
-- Restart Level - The text attached to the button should be changed to "Restart Level", and when the button is clicked it should restart the current scene.
-- Main Menu - The text should read "Return to Main Menu" and should move the player to the intro scene.
+First, create a world-space UI, whose canvas contains the following items:
 
-Once you have created the menu, the user should be able to open and close the menu using by pressing and holding down the app button on the DayDream controller, similar to the pause menu functionality in Shark Runner.
+- A panel to serve as the background of the menu.
+- Text to serve as the title (i.e. something like "Barrel Bouncer", "Main Menu", or "Game Paused")
+- 2 large buttons that are spaced appropriately apart:
+  - A "Restart" button that restarts the scene when the button is clicked
+  - An "Exit" button that quits your application
 
-### Add Intro Scene
+Feel free to edit any of the colors, fonts, or properties of the UI elements. Your final UI might look something like this:
 
-Finally, you will create an introductory scene for your app with a 360 photo.
+![Image showing sample main menu UI](images/main-menu.png)
 
-- Create a new scene.
-- Set up the scene for use with Google VR
-- Add a new sphere into your scene and remove its collider. Then, scale it and position it as necessary so that the player is inside of and surround by the sphere.
-- Find a 360 photo online that you would like to use and import it into your project.
-- Create a new material and add your photo onto it. Then apply it onto your cube.
-- Attach the _**FlipMesh**_ script onto your sphere. You should now be able to see the 360 image in your game view.
-- Adjust your sphere's size and position again, if necessary, in order to make everything appear at a life-like scale.
-- Create a world-space UI in your scene. Unlike the previous scene, it does not appear and disappear based on controller input, but rather is always present in the scene. It should be placed in front of the player's initial starting position at a distance where it is easily readable. The UI should accomplish the following:
-  - At the top should be a large text in bold with the name of the game.
-  - Under that you should have a smaller (but still readable) italic text that is supposed to display a fact about barrels. Come up with a list of at least 5 facts about barrels and then create a script that randomly switches the fact that is displayed every five seconds.
-  - Finally, you will have 2 buttons. One should read "Play" and should load up the game when pressed. The other should read "Exit" and should quit the application when pressed. Note that this final one is only testable on an actual device (i.e. not in the Editor).
-- Select a music track of your choice and import it into your project. Then have it play in a 2D mode at the start of the scene. It should always repeat upon completion but only within this scene (i.e. it does not have to be persistent between scenes). 
+Next you will have to add in the functionality to open and close the menu when the user "long presses" the app button. Whenever the menu is opened, it should appear right in front of the user at a set distance of 0.75 meters in front of where the user is currently looking. Note that the menu should stay in place and not "follow" the user while it is opened (i.e. even if the user turns their head to look around or teleports), but rather it only moves its position when it is being opened.
 
 ### Bonus Tasks (Optional)
 
+Congrats! You have now finished creating your very first VR game from scratch and have hopefully learned a lot along the way. Nevertheless, there is still a lot you can do to improve your app's experience, if you're up for the challenge. Below are a few suggestions.
+
+- Create an "intro scene" with a 360° photo or video, some music, and a world-space UI that stays in place within your scene. The UI could welcome the user to the app, cycle through fun facts about barrels, and allow them to start or exit the game. You will also have to change the UI in your gameplay scene to go back to the intro scene instead of exiting, and you will have to deal with additional scene management. A good first step towards having 360° photos/videos is by placing a sphere in your scene that surrounds the user. Check out [this tutorial](https://youtu.be/hmCxXFY-JHs) on how to use 360° video in Unity.
+- Build a mechanism for scoring points when you destroy the barrels and an always visible UI that displays points and the number of balls you have left.
+- Explore "prettying up" your UIs beyond Unity's default look. For example, you could give your panels a wooden barrel-like look and add fun animated fonts for your text.
 - Unity's default audio spatializer is fairly limited in its capabilities: it only considers the volume and position of the sound when making its calculations. As we discussed in class, however, sound can be affected by a variety  of factors, like the medium it travels through (air, wind, snow, water, etc.) and the objects it passes through or reflects off of (walls, ground, barrels, etc.). Google's open-source Resonance Audio SDK allows you to use more realistic spatial audio effects in your scene. Revisit the spatial audio tasks from above and implement them using the Resonance Audio SDK instead. Here is [a blog post](https://blog.google/products/google-ar-vr/open-sourcing-resonance-audio/), [a video](https://youtu.be/IYdx9cnHN8I), and [a getting started guide](https://resonance-audio.github.io/resonance-audio/develop/unity/getting-started.html) about it.
-- For your intro scene, try using adding in a 360 video instead of just a 360 photo. To do this, you will have to explore the concept of render textures. Check out [this tutorial](https://youtu.be/hmCxXFY-JHs) for more info.
+- Use Google's Daydream Renderer tool to improve performance for mobile VR by further optimizing the lighting, textures, and shaders.
 
 ## Submission Details
 
