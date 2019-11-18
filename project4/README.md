@@ -105,6 +105,8 @@ Change the following settings in the _**Other Settings**_ section:
 - **Target minimum iOS version:** 11.0
   - This is the earliest version of iOS that supports ARKit.
 - **Requires ARKit support:** ✔
+- **Architecture:** ARM64
+  - This is the only architecture that the ARKit XR Plugin supports.
 
 The following settings should already be set for you:
 
